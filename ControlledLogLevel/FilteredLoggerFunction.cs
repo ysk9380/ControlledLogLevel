@@ -14,14 +14,14 @@ namespace ControlledLogLevel
 {
     internal class FilteredLoggerFunction
     {
-        public FilteredLoggerFunction(ILogger<FilteredLoggerFunction> logger)
-        {
-            _Logger = logger;            
-        }
-
         private ILogger<FilteredLoggerFunction> _Logger { get; }
         private LoggingLevelSwitch _LogLevelSwitch { get; }
 
+        internal FilteredLoggerFunction(ILogger<FilteredLoggerFunction> logger)
+        {
+            _Logger = logger;            
+        }
+        
         [FunctionName("GetFilteredLogs")]
         public void GetFilteredLogs(
           [HttpTrigger(AuthorizationLevel.Anonymous, "get")]
