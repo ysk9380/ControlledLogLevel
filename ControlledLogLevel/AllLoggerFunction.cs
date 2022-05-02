@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
+using System;
 
 namespace ControlledLogLevel
 {
@@ -9,14 +11,13 @@ namespace ControlledLogLevel
     {
         private ILogger<AllLoggerFunction> _Logger { get; }
 
-        internal AllLoggerFunction(ILogger<AllLoggerFunction> logger)
+        public AllLoggerFunction(ILogger<AllLoggerFunction> logger)
         {
             _Logger = logger;
         }
 
-
         [FunctionName("GetAllLogs")]
-        public void GetAllLogs(
+        public IActionResult GetAllLogs(
           [HttpTrigger(AuthorizationLevel.Anonymous, "get")]
           HttpRequest req)
         {
@@ -26,6 +27,8 @@ namespace ControlledLogLevel
             _Logger.LogWarning("Warning Logged");
             _Logger.LogError("Error Logged");
             _Logger.LogCritical("Fatal Logged");
+
+            return new OkObjectResult(Enum.GetName(StartUp.LogLevelSwitch.MinimumLevel));
         }
     }
 }
